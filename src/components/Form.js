@@ -2,18 +2,30 @@ import React, { useCallback, useRef } from "react";
 import { Form, Button } from "react-bootstrap";
 
 export default function AddMovie() {
-
-  const AddnewMovie = useCallback((event) => {
+  const AddnewMovie = useCallback(async (event) => {
     event.preventDefault();
     const form = event.target;
-    const obj ={
-        title : titleref.current.value,
-        openingText : openingref.current.value,
-        releaseDate : releaseref.current.value
+    const obj = {
+      title: titleref.current.value,
+      openingtext: openingref.current.value,
+      releasedate: releaseref.current.value,
+    };
+    try {
+      await fetch(
+        "https://react-http-2467f-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
+        {
+          method: "POST",
+          body: JSON.stringify(obj),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
     }
-    console.log(obj);
     form.reset();
-  },[]);
+  }, []);
 
   const titleref = useRef(undefined);
   const openingref = useRef(undefined);
@@ -27,7 +39,7 @@ export default function AddMovie() {
 
       <Form.Group className="mb-3" controlId="formBasicopeningText">
         <Form.Label>openingText</Form.Label>
-        <Form.Control type="text" placeholder="openingText" ref={openingref}/>
+        <Form.Control type="text" placeholder="openingText" ref={openingref} />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicReleaseDate">
