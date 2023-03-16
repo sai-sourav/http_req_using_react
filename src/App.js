@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
+import AddMovie from "./components/Form";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -13,6 +14,7 @@ function App() {
   useEffect(() => {
     if (cancel) {
       clearInterval(intervalId);
+      console.log(`cancelled ${intervalId}`)
     }
   }, [cancel, intervalId]);
 
@@ -38,7 +40,6 @@ function App() {
               openingText: movie.opening_crawl,
             };
           });
-          clearInterval(intervalId);
           setMovies(newmovies);
         } catch (err) {
           setError(err.message);
@@ -71,18 +72,22 @@ function App() {
 
   return (
     <React.Fragment>
-      <section>
-        <button onClick={getMovies}>Fetch Movies</button>
+      <section className="section" style={{textAlign : "left"}}>
+        <AddMovie />
+      </section>
+      <section className="section">
+        <button className="button" onClick={getMovies}>Fetch Movies</button>
         <button
           onClick={() => {
             setCancel(true);
           }}
           disabled={movies.length > 0}
+          className="button"
         >
           Cancel Retry
         </button>
       </section>
-      <section>{content}</section>
+      <section className="section">{content}</section>
     </React.Fragment>
   );
 }
